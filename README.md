@@ -8,7 +8,7 @@ A global .NET Core tool that helps to generate tests classes based on project fi
 
 # Installation
 ```sh
-#soon
+dotnet tool install --global dotnet-gtests
 ```
 
 # Usage
