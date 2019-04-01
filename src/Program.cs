@@ -13,9 +13,10 @@ namespace dotnet.gtests
 {
     class Program
     {
-        private static readonly List<Regex> EXCLUDED_DIRECTORIES = new List<Regex>() {
+        private static readonly List<Regex> EXCLUDE_PATTERN = new List<Regex>() {
             new Regex("[Oo]bj/"),
-            new Regex("[Bb]in/")
+            new Regex("[Bb]in/"),
+            new Regex("Test.cs$")
         };
 
         private static readonly string TEMPLATE_TEST_CLASS = "\nnamespace $classNamespace \n{\n\tclass $className\n\t{\n\t}\n}";
@@ -39,7 +40,7 @@ namespace dotnet.gtests
         private static bool IsExcluded(string searchPath, string target)
         {
             var startPath = target.Replace(searchPath, string.Empty).Replace(@"\", "/");
-            return EXCLUDED_DIRECTORIES.Any(d => d.Match(startPath).Success);
+            return EXCLUDE_PATTERN.Any(d => d.Match(startPath).Success);
         }
 
         private static string GetTreeDirectory(string searchPath, string target)
@@ -75,21 +76,28 @@ namespace dotnet.gtests
             var testFilesPath = Path.GetDirectoryName(options.TestProject);
             var codeFiles = Directory.GetFiles(codeFilesPath, "*.cs", SearchOption.AllDirectories).Where(d => !IsExcluded(codeFilesPath, d));
             var rootNamespace = GetRootNamespace(options.TestProject);
+            if (!string.IsNullOrEmpty(options.OutputDir))
+            {
+                rootNamespace = $"{rootNamespace}.{Regex.Replace(options.OutputDir, @"[^\w.]", "_")}";
+            }
+
             foreach (var codeFile in codeFiles)
             {
                 var treeDirectory = GetTreeDirectory(codeFilesPath, codeFile);
                 var classNamespace = $"{rootNamespace}{treeDirectory.Replace("/", ".")}";
                 var className = $"{Path.GetFileNameWithoutExtension(codeFile)}Test";
                 var fileName = $"{className}.cs";
-                var pathTestFile = testFilesPath + treeDirectory + "/" + fileName;
-                Directory.CreateDirectory(testFilesPath + treeDirectory);
-                if (File.Exists(pathTestFile))
+                var fileDirectory = testFilesPath + "/" + options.OutputDir + treeDirectory;
+                var filePath = fileDirectory + "/" + fileName;
+                Directory.CreateDirectory(fileDirectory);
+                if (File.Exists(filePath))
                 {
-                    Console.WriteLine($"File already exist {pathTestFile}");
+                    Console.WriteLine($"File already exist {filePath}");
                     continue;
                 }
-                using (StreamWriter writer = new StreamWriter(pathTestFile, false, Encoding.UTF8))
+                using (StreamWriter writer = new StreamWriter(filePath, false, Encoding.UTF8))
                 {
+                    Console.WriteLine($"Writing file: {filePath}");
                     writer.Write(TEMPLATE_TEST_CLASS.Replace("$classNamespace", classNamespace).Replace("$className", className));
                     writer.Close();
                 }

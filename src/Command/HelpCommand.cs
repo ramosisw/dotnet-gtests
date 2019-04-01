@@ -27,6 +27,7 @@ namespace dotnet.gtests.Command
             Console.WriteLine("  -h, --help            Show command line help.");
             Console.WriteLine("  -s, --source-project  The project file where the classes will be searched to generate tests.");
             Console.WriteLine("  -m, --gmethods        If this option exists, public methods will be searched in the class to generate in the tests.");
+            Console.WriteLine("  -o, --output-dir      The ouput folder where be add tests classes, relative to <PROJECT>. (default is root on <PROJECT>)");
         }
     }
 }

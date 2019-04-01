@@ -9,6 +9,7 @@ namespace dotnet.gtests.Command
         public string TestProject { get; set; }
         public string CodeProject { get; set; }
         public bool GenerateMethods { get; set; }
+        public string OutputDir { get; set; }
 
         public OptionsCommand()
         {
@@ -23,14 +24,20 @@ namespace dotnet.gtests.Command
 
         public static OptionsCommand Parse(string[] args)
         {
-            var validOptions = new[] { "-s", "--source-project", "-m", "--gmethods" };
+            Console.WriteLine(string.Join("|", args));
+            var validOptions = new[] { "-s", "--source-project", "-m", "--gmethods", "-o", "--output-dir" };
             var optionsCommand = new OptionsCommand();
             for (var i = 0; i < args.Length; i++)
             {
-                var arg = args[i];
-                var argName = arg.Split("=")[0];
-                if (arg.StartsWith('-') && !validOptions.Contains(argName)) throw new ArgumentException($"Unknown option {argName}");
-                var argValue = arg.Contains("=") ? arg.Split("=")[1] : i + 1 < args.Length && argName != "-m" ? args[i++] : args[i];
+                var arg = args[i].Trim();
+                var argSplit = arg.Split("=");
+                var argName = argSplit[0];
+                var argValue = args[i];
+                if (arg.StartsWith("-") && !validOptions.Contains(argName)) throw new ArgumentException($"Unknown option {argName}");
+                if (arg.StartsWith("-") && !new[] { "-m", "--gmethods" }.Contains(argName))
+                {
+                    argValue = arg.Contains("=") && !string.IsNullOrEmpty(argSplit[1]) ? argSplit[1] : (i + 1) < args.Length ? args[i++ + 1] : args[i];
+                }
                 switch (argName)
                 {
                     case "-s":
@@ -40,6 +47,10 @@ namespace dotnet.gtests.Command
                     case "-m":
                     case "--gmethods":
                         optionsCommand.GenerateMethods = true;
+                        break;
+                    case "-o":
+                    case "--output-dir":
+                        optionsCommand.OutputDir = argValue;
                         break;
                     default:
                         optionsCommand.TestProject = Path.GetFullPath(argValue);
