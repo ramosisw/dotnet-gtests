@@ -23,7 +23,7 @@ namespace dotnet.gtests.Command
 
         public static OptionsCommand Parse(string[] args)
         {
-            var validOptions = new[] { "-t", "--test-project", "-m", "--gmethods" };
+            var validOptions = new[] { "-s", "--source-project", "-m", "--gmethods" };
             var optionsCommand = new OptionsCommand();
             for (var i = 0; i < args.Length; i++)
             {
@@ -33,16 +33,16 @@ namespace dotnet.gtests.Command
                 var argValue = arg.Contains("=") ? arg.Split("=")[1] : i + 1 < args.Length && argName != "-m" ? args[i++] : args[i];
                 switch (argName)
                 {
-                    case "-t":
-                    case "--test-project":
-                        optionsCommand.TestProject = Path.GetFullPath(argValue);
+                    case "-s":
+                    case "--source-project":
+                        optionsCommand.CodeProject = Path.GetFullPath(argValue);
                         break;
                     case "-m":
                     case "--gmethods":
                         optionsCommand.GenerateMethods = true;
                         break;
                     default:
-                        optionsCommand.CodeProject = Path.GetFullPath(argValue);
+                        optionsCommand.TestProject = Path.GetFullPath(argValue);
                         break;
                 }
             }

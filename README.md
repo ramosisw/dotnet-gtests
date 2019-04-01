@@ -21,7 +21,7 @@ Arguments:
   <PROJECT>   The project file to operate on, where be add tests classes. If a file is not specified, the command will search the current directory for one.
 
 Options:
-  -h, --help        Show command line help.
-  -p, --project     The project file where the classes will be searched to generate tests.
-  -m, --gmethods    If this option exists, public methods will be searched in the class to generate in the tests.
+  -h, --help            Show command line help.
+  -s, --source-project  The project file where the classes will be searched to generate tests.
+  -m, --gmethods        If this option exists, public methods will be searched in the class to generate in the tests.
 ```
