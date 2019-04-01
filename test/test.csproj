@@ -5,6 +5,9 @@
 
     <IsPackable>false</IsPackable>
   </PropertyGroup>
+  <PropertyGroup>
+    <RootNamespace>dotnet.gtests.test</RootNamespace>
+  </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.9.0" />

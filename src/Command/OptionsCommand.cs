@@ -2,7 +2,7 @@ using System;
 using System.IO;
 using System.Linq;
 
-namespace dotnet.gtests
+namespace dotnet.gtests.Command
 {
     public class OptionsCommand
     {
@@ -23,7 +23,7 @@ namespace dotnet.gtests
 
         public static OptionsCommand Parse(string[] args)
         {
-            var validOptions = new[] { "-p", "--project", "-m", "--gmethods" };
+            var validOptions = new[] { "-t", "--test-project", "-m", "--gmethods" };
             var optionsCommand = new OptionsCommand();
             for (var i = 0; i < args.Length; i++)
             {
@@ -33,16 +33,16 @@ namespace dotnet.gtests
                 var argValue = arg.Contains("=") ? arg.Split("=")[1] : i + 1 < args.Length && argName != "-m" ? args[i++] : args[i];
                 switch (argName)
                 {
-                    case "-p":
-                    case "--project":
-                        optionsCommand.CodeProject = Path.GetFullPath(argValue);
+                    case "-t":
+                    case "--test-project":
+                        optionsCommand.TestProject = Path.GetFullPath(argValue);
                         break;
                     case "-m":
                     case "--gmethods":
                         optionsCommand.GenerateMethods = true;
                         break;
                     default:
-                        optionsCommand.TestProject = Path.GetFullPath(argValue);
+                        optionsCommand.CodeProject = Path.GetFullPath(argValue);
                         break;
                 }
             }

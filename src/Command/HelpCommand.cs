@@ -1,7 +1,7 @@
 using System;
 using System.Linq;
 
-namespace dotnet.gtests
+namespace dotnet.gtests.Command
 {
     public static class HelpCommand
     {
@@ -25,7 +25,7 @@ namespace dotnet.gtests
             Console.WriteLine("");
             Console.WriteLine("Options:");
             Console.WriteLine("  -h, --help        Show command line help.");
-            Console.WriteLine("  -p, --project     The project file where the classes will be searched to generate tests.");
+            Console.WriteLine("  -t, --test-project     The project file where the classes will be searched to generate tests.");
             Console.WriteLine("  -m, --gmethods    If this option exists, public methods will be searched in the class to generate in the tests.");
         }
     }
