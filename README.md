@@ -27,3 +27,10 @@ Options:
   -m, --gmethods        If this option exists, public methods will be searched in the class to generate in the tests.
   -o, --output-dir      The ouput folder where be add tests classes, relative to <PROJECT>. (default is root on <PROJECT>)
 ```
+
+
+# Examples
+
+<p align="center"><img src="/img/dotnet-gtests.gif?raw=true"/></p>
+
+<p align="center"><img src="/img/dotnet-gtests-already-exists.gif?raw=true"/></p>

@@ -6,7 +6,7 @@
     <IsPackable>false</IsPackable>
   </PropertyGroup>
   <PropertyGroup>
-    <RootNamespace>dotnet.gtests.test</RootNamespace>
+    <RootNamespace>dotnet.gtests.tests</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
