@@ -15,6 +15,7 @@ namespace dotnet.gtests.Command
         {
             TestProject = Path.GetFullPath(".");
             CodeProject = Path.GetFullPath(".");
+            GenerateMethods = true;
         }
 
         public override string ToString()
@@ -34,7 +35,7 @@ namespace dotnet.gtests.Command
                 var argName = argSplit[0];
                 var argValue = args[i];
                 if (arg.StartsWith("-") && !validOptions.Contains(argName)) throw new ArgumentException($"Unknown option {argName}");
-                if (arg.StartsWith("-") && !new[] { "-m", "--gmethods" }.Contains(argName))
+                if (arg.StartsWith("-"))
                 {
                     argValue = arg.Contains("=") && !string.IsNullOrEmpty(argSplit[1]) ? argSplit[1] : (i + 1) < args.Length ? args[i++ + 1] : args[i];
                 }
@@ -46,7 +47,14 @@ namespace dotnet.gtests.Command
                         break;
                     case "-m":
                     case "--gmethods":
-                        optionsCommand.GenerateMethods = true;
+                        try
+                        {
+                            optionsCommand.GenerateMethods = bool.Parse(argValue);
+                        }
+                        catch (Exception)
+                        {
+                            throw new ArgumentException($"Unknown value {argValue} for option {argName}, only acept true or false");
+                        }
                         break;
                     case "-o":
                     case "--output-dir":

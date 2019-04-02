@@ -24,7 +24,7 @@ Arguments:
 Options:
   -h, --help            Show command line help.
   -s, --source-project  The project file where the classes will be searched to generate tests.
-  -m, --gmethods        If this option exists, public methods will be searched in the class to generate in the tests.
+  -m, --gmethods        Public methods must be included in the test class. (default true).
   -o, --output-dir      The ouput folder where be add tests classes, relative to <PROJECT>. (default is root on <PROJECT>)
 ```
 
