@@ -100,7 +100,7 @@ namespace dotnet.gtests
                     line += '\r';
                     if (_methodPattern.Match(line).Success && line.Trim().StartsWith("public"))
                     {
-                        classMethods.Add($"\n\t\tvoid {_methodPattern.Match(line).Value} ()\n\t\t{{\n\t\t}}");
+                        classMethods.Add($"\n\t\tpublic void {_methodPattern.Match(line).Value} ()\n\t\t{{\n\t\t}}");
                     }
                 }
                 file.Close();
