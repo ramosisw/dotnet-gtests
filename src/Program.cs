@@ -8,6 +8,9 @@ using System.Text;
 using System.Threading;
 using Microsoft.CSharp;
 using System.Xml.Linq;
+using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace dotnet.gtests
 {
@@ -18,9 +21,7 @@ namespace dotnet.gtests
             new Regex("[Bb]in/"),
             new Regex("Test.cs$")
         };
-
-        private static readonly Regex _methodPattern = new Regex(@"[\w_]{1,}((?=\(.*\)[\r\n ]+\{)|(?=\(.*\)\{)|(?=\(.*\)[\r\n ]+))");
-        private static readonly string TEMPLATE_TEST_CLASS = "\nnamespace $classNamespace \n{\n\tclass $className\n\t{\n\t$classMethods\n\t}\n}";
+        private static readonly string TEMPLATE_TEST_CLASS = "\nnamespace $classNamespace \n{\n\tpublic class $className\n\t{\n$classMethods\n\t}\n}";
         public static int Main(string[] args)
         {
             if (HelpCommand.HasHelpOption(args)) return 0;
@@ -91,22 +92,16 @@ namespace dotnet.gtests
                 var fileDirectory = testFilesPath + "/" + options.OutputDir + treeDirectory;
                 var filePath = fileDirectory + "/" + fileName;
 
-                var classMethods = new List<string>();
-                
                 var file = new StreamReader(codeFile, Encoding.UTF8);
-                string line;
-                while ((line = file.ReadLine()) != null)
-                {
-                    line += '\r';
-                    if (_methodPattern.Match(line).Success && line.Trim().StartsWith("public"))
-                    {
-                        classMethods.Add($"\n\t\tpublic void {_methodPattern.Match(line).Value} ()\n\t\t{{\n\t\t}}");
-                    }
-                }
+                SyntaxTree tree = CSharpSyntaxTree.ParseText(file.ReadToEnd());
                 file.Close();
+                var root = (CompilationUnitSyntax)tree.GetRoot();
+                var classMethods = from methodDeclaration in root.DescendantNodes().OfType<MethodDeclarationSyntax>()
+                                   where string.Equals(methodDeclaration.Modifiers.FirstOrDefault().ValueText, "public", StringComparison.OrdinalIgnoreCase)
+                                   select "\t\tvoid " + methodDeclaration.Identifier.ValueText + "()\n\t\t{\n\t\t}\n";
 
                 //If count of methos is 0, maybe is a model, interface
-                if (classMethods.Count == 0)
+                if (classMethods.Count() == 0)
                 {
                     Console.WriteLine($"Skiping {codeFile}");
                     continue;
@@ -118,7 +113,7 @@ namespace dotnet.gtests
                     continue;
                 }
 
-                if(!options.GenerateMethods) classMethods.Clear();
+                if (!options.GenerateMethods) classMethods = new List<string>();
 
                 Directory.CreateDirectory(fileDirectory);
                 using (StreamWriter writer = new StreamWriter(filePath, false, Encoding.UTF8))
