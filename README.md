@@ -1,9 +1,8 @@
 # dotnet-gtests
-[![Build Status](https://img.shields.io/travis/ramosisw/dotnet-gtests/master.svg?style=flat-square)](https://travis-ci.org/ramosisw/dotnet-gtests)
-[![License](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](https://github.com/ramosisw/dotnet-gtests/blob/master/LICENSE)
-[![Source](https://img.shields.io/badge/source-GitHub-purple.svg?style=flat-square)](https://github.com/ramosisw/dotnet-gtests)
-[![NuGet Version](https://badgen.net/nuget/v/dotnet-gtests)](https://www.nuget.org/packages/dotnet-gtests/)
-[![NuGet Download](https://img.shields.io/nuget/dt/dotnet-gtests.svg)](https://www.nuget.org/packages/dotnet-gtests/)
+[![Build Status](https://img.shields.io/travis/ramosisw/dotnet-gtests/master.svg?style=flat-square&logo=travis)](https://travis-ci.org/ramosisw/dotnet-gtests)
+[![License](https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square&logo=read-the-docs)](https://github.com/ramosisw/dotnet-gtests/blob/master/LICENSE)
+[![NuGet Version](https://img.shields.io/nuget/v/dotnet-gtests.svg?style=flat-square&logo=nuget)](https://www.nuget.org/packages/dotnet-gtests/)
+[![NuGet Download](https://img.shields.io/nuget/dt/dotnet-gtests.svg?style=flat-square&logo=nuget)](https://www.nuget.org/packages/dotnet-gtests/)
 
 A global .NET Core tool that helps to generate tests classes based on project file 
 
