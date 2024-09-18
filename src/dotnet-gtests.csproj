@@ -1,11 +1,23 @@
 <Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup Condition=" '$(GITHUB_REF)' == '' ">
+    <GITHUB_REF>refs/tags/v8.0.0</GITHUB_REF>
+  </PropertyGroup>
+
   <PropertyGroup>
-    <Version>8.0.0</Version>
+    <Version>$(GITHUB_REF.Substring(10))</Version>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="$(Version.StartsWith('v'))">
+    <Version>$(Version.Substring(1))</Version>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="$(Version.EndsWith('-nuget'))">
+    <Version>$(Version.Substring(0, $(Version.IndexOf('-nuget'))))</Version>
+  </PropertyGroup>
+  <PropertyGroup>
     <AssemblyVersion>$(Version)</AssemblyVersion>
     <FileVersion>$(Version)</FileVersion>
     <PackageVersion>$(Version)</PackageVersion>
-  </PropertyGroup>
-  <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>net8.0</TargetFramework>
     <RootNamespace>dotnet.gtests</RootNamespace>
@@ -22,15 +34,17 @@
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <Summary>Usage:
       dotnet-gtests [options] &lt;PROJECT&gt;
-      
-    Arguments:
-      &lt;PROJECT&gt;   The project file to operate on, where be add tests classes. If a file is not specified, the command will search the current directory for one.
-    
-    Options:
-      -h, --help            Show command line help.
-      -s, --source-project  The project file where the classes will be searched to generate tests.
-      -m, --gmethods        Public methods must be included in the test class. (default true).
-      -o, --output-dir      The ouput folder where be add tests classes, relative to &lt;PROJECT&gt;. (default is root on &lt;PROJECT&gt;)</Summary>
+
+      Arguments:
+      &lt;PROJECT&gt; The project file to operate on, where be add tests classes. If a file is not
+      specified, the command will search the current directory for one.
+
+      Options:
+      -h, --help Show command line help.
+      -s, --source-project The project file where the classes will be searched to generate tests.
+      -m, --gmethods Public methods must be included in the test class. (default true).
+      -o, --output-dir The ouput folder where be add tests classes, relative to &lt;PROJECT&gt;.
+      (default is root on &lt;PROJECT&gt;)</Summary>
   </PropertyGroup>
   <ItemGroup>
     <None Include="../LICENSE" Pack="true" PackagePath="" />
