@@ -1,5 +1,5 @@
 # dotnet-gtests
-[![Build Status](https://img.shields.io/travis/ramosisw/dotnet-gtests/master.svg?style=flat-square&logo=travis)](https://travis-ci.org/ramosisw/dotnet-gtests)
+[![publish to nuget](https://github.com/ramosisw/dotnet-gtests/actions/workflows/publish.yml/badge.svg)](https://github.com/ramosisw/dotnet-gtests/actions/workflows/publish.yml)
 [![License](https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square&logo=read-the-docs)](https://github.com/ramosisw/dotnet-gtests/blob/master/LICENSE)
 [![NuGet Version](https://img.shields.io/nuget/v/dotnet-gtests.svg?style=flat-square&logo=nuget)](https://www.nuget.org/packages/dotnet-gtests/)
 [![NuGet Download](https://img.shields.io/nuget/dt/dotnet-gtests.svg?style=flat-square&logo=nuget)](https://www.nuget.org/packages/dotnet-gtests/)
