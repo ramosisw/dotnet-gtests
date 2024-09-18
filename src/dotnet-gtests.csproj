@@ -19,9 +19,22 @@
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <RepositoryUrl>https://github.com/ramosisw/dotnet-gtests.git</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <Summary>Usage:
+      dotnet-gtests [options] &lt;PROJECT&gt;
+      
+    Arguments:
+      &lt;PROJECT&gt;   The project file to operate on, where be add tests classes. If a file is not specified, the command will search the current directory for one.
+    
+    Options:
+      -h, --help            Show command line help.
+      -s, --source-project  The project file where the classes will be searched to generate tests.
+      -m, --gmethods        Public methods must be included in the test class. (default true).
+      -o, --output-dir      The ouput folder where be add tests classes, relative to &lt;PROJECT&gt;. (default is root on &lt;PROJECT&gt;)</Summary>
   </PropertyGroup>
   <ItemGroup>
-    <None Include="..\LICENSE" Pack="true" PackagePath="" />
+    <None Include="../LICENSE" Pack="true" PackagePath="" />
+    <None Include="../README.md" Pack="true" PackagePath="" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.Build" Version="17.11.4" />
