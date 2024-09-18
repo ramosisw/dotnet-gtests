@@ -11,6 +11,11 @@
     <Version>$(Version.Substring(1))</Version>
   </PropertyGroup>
 
+  <!-- fix build on push -->
+  <PropertyGroup Condition="$(Version.StartsWith('/'))">
+    <Version>0.0.0</Version>
+  </PropertyGroup>
+
   <PropertyGroup>
     <AssemblyVersion>$(Version)</AssemblyVersion>
     <FileVersion>$(Version)</FileVersion>
