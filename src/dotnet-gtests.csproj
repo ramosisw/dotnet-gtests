@@ -11,9 +11,6 @@
     <Version>$(Version.Substring(1))</Version>
   </PropertyGroup>
 
-  <PropertyGroup Condition="$(Version.EndsWith('-nuget'))">
-    <Version>$(Version.Substring(0, $(Version.IndexOf('-nuget'))))</Version>
-  </PropertyGroup>
   <PropertyGroup>
     <AssemblyVersion>$(Version)</AssemblyVersion>
     <FileVersion>$(Version)</FileVersion>
