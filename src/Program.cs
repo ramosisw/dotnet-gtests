@@ -114,7 +114,7 @@ namespace dotnet.gtests
                 writer.Write(TEMPLATE_TEST_CLASS
                     .Replace("$classNamespace", classNamespace)
                     .Replace("$className", className)
-                    .Replace("$classMethods", string.Join("\n", classMethods.ToArray()))
+                    .Replace("$classMethods", string.Join("\n", classMethods.Distinct().ToArray()))
                 );
                 writer.Close();
             }
