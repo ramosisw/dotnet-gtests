@@ -63,11 +63,11 @@ namespace dotnet.gtests
                     .Elements("PropertyGroup")
                     .Elements("RootNamespace")
                     .Select(e => e.Value)
-                    .FirstOrDefault();
+                    .First();
             }
             catch (Exception)
             {
-                rootNamespace = Regex.Replace(new DirectoryInfo(Path.GetDirectoryName(fullProjectPath)).Name, @"[^\w.]", "_");
+                rootNamespace = Regex.Replace(new FileInfo(Path.GetDirectoryName(fullProjectPath)).Name, @"[^\w.]", "_");
             }
             return rootNamespace;
         }
@@ -79,9 +79,7 @@ namespace dotnet.gtests
             var codeFiles = Directory.GetFiles(codeFilesPath, "*.cs", SearchOption.AllDirectories).Where(d => !IsExcluded(codeFilesPath, d));
             var rootNamespace = GetRootNamespace(options.TestProject);
             if (!string.IsNullOrEmpty(options.OutputDir))
-            {
-                rootNamespace = $"{rootNamespace}.{Regex.Replace(options.OutputDir, @"[^\w.]", "_")}";
-            }
+                rootNamespace = $"{rootNamespace}{(string.IsNullOrWhiteSpace(rootNamespace) ? string.Empty : ".")}{Regex.Replace(options.OutputDir, @"[^\w.]", "_")}";
 
             foreach (var codeFile in codeFiles)
             {
@@ -100,10 +98,10 @@ namespace dotnet.gtests
                                    where string.Equals(methodDeclaration.Modifiers.FirstOrDefault().ValueText, "public", StringComparison.OrdinalIgnoreCase)
                                    select "\t\tvoid " + methodDeclaration.Identifier.ValueText + "()\n\t\t{\n\t\t}\n";
 
-                //If count of methos is 0, maybe is a model, interface
+                //If count of methods is 0, maybe is a model, interface
                 if (classMethods.Count() == 0)
                 {
-                    Console.WriteLine($"Skiping {codeFile}");
+                    Console.WriteLine($"Skipping {codeFile}");
                     continue;
                 }
 
@@ -113,19 +111,17 @@ namespace dotnet.gtests
                     continue;
                 }
 
-                if (!options.GenerateMethods) classMethods = new List<string>();
+                if (!options.GenerateMethods) classMethods = [];
 
                 Directory.CreateDirectory(fileDirectory);
-                using (StreamWriter writer = new StreamWriter(filePath, false, Encoding.UTF8))
-                {
-                    Console.WriteLine($"Writing file: {filePath}");
-                    writer.Write(TEMPLATE_TEST_CLASS
-                        .Replace("$classNamespace", classNamespace)
-                        .Replace("$className", className)
-                        .Replace("$classMethods", string.Join("\n", classMethods.ToArray()))
-                    );
-                    writer.Close();
-                }
+                using var writer = new StreamWriter(filePath, false, new UTF8Encoding(false));
+                Console.WriteLine($"Writing file: {filePath}");
+                writer.Write(TEMPLATE_TEST_CLASS
+                    .Replace("$classNamespace", classNamespace)
+                    .Replace("$className", className)
+                    .Replace("$classMethods", string.Join("\n", classMethods.ToArray()))
+                );
+                writer.Close();
             }
             return 0;
         }
