@@ -46,11 +46,7 @@ namespace dotnet.gtests
         }
 
         private static string GetTreeDirectory(string searchPath, string target)
-        {
-
-            var startPath = Path.GetDirectoryName(target).Replace(searchPath, string.Empty).Replace(@"\", "/");
-            return startPath;
-        }
+            => Path.GetDirectoryName(target).Replace(searchPath, string.Empty).Replace(@"\", "/");
 
         private static string GetRootNamespace(string fullProjectPath)
         {
