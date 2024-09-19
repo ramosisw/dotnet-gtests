@@ -63,12 +63,11 @@ namespace dotnet.gtests
                     .Elements("PropertyGroup")
                     .Elements("RootNamespace")
                     .Select(e => e.Value)
-                    .First();
+                    .FirstOrDefault();
+                if (string.IsNullOrWhiteSpace(rootNamespace))
+                    rootNamespace = Regex.Replace(new FileInfo(Path.GetDirectoryName(fullProjectPath)).Name, @"[^\w.]", "_");
             }
-            catch (Exception)
-            {
-                rootNamespace = Regex.Replace(new FileInfo(Path.GetDirectoryName(fullProjectPath)).Name, @"[^\w.]", "_");
-            }
+            catch { }
             return rootNamespace;
         }
 
