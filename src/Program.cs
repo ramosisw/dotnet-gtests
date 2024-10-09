@@ -21,7 +21,7 @@ namespace dotnet.gtests
             new Regex("[Bb]in/"),
             new Regex("Test.cs$")
         };
-        private static readonly string TEMPLATE_TEST_CLASS = "\nnamespace $classNamespace \n{\n\tpublic class $className\n\t{\n$classMethods\n\t}\n}";
+        private static readonly string TEMPLATE_TEST_CLASS = "\nnamespace $classNamespace;\n\npublic class $className\n{\n$classMethods\n}\n";
         public static int Main(string[] args)
         {
             if (HelpCommand.HasHelpOption(args)) return 0;
@@ -41,12 +41,12 @@ namespace dotnet.gtests
 
         private static bool IsExcluded(string searchPath, string target)
         {
-            var startPath = target.Replace(searchPath, string.Empty).Replace(@"\", "/");
+            var startPath = target.Replace(searchPath, string.Empty).Replace(Path.DirectorySeparatorChar, '/');
             return _excludedPatterns.Any(d => d.Match(startPath).Success);
         }
 
         private static string GetTreeDirectory(string searchPath, string target)
-            => Path.GetDirectoryName(target).Replace(searchPath, string.Empty).Replace(@"\", "/");
+            => Path.GetDirectoryName(target).Replace(searchPath, string.Empty).Replace(Path.DirectorySeparatorChar, '/');
 
         private static string GetRootNamespace(string fullProjectPath)
         {
@@ -79,11 +79,11 @@ namespace dotnet.gtests
             foreach (var codeFile in codeFiles)
             {
                 var treeDirectory = GetTreeDirectory(codeFilesPath, codeFile);
-                var classNamespace = $"{rootNamespace}{treeDirectory.Replace("/", ".")}";
+                var classNamespace = $"{rootNamespace}{treeDirectory.Replace(Path.DirectorySeparatorChar, '.')}";
                 var className = $"{Path.GetFileNameWithoutExtension(codeFile)}Tests";
                 var fileName = $"{className}.cs";
-                var fileDirectory = testFilesPath + "/" + options.OutputDir + treeDirectory;
-                var filePath = fileDirectory + "/" + fileName;
+                var fileDirectory = testFilesPath + Path.DirectorySeparatorChar + options.OutputDir + treeDirectory;
+                var filePath = fileDirectory + Path.DirectorySeparatorChar + fileName;
 
                 var file = new StreamReader(codeFile, Encoding.UTF8);
                 SyntaxTree tree = CSharpSyntaxTree.ParseText(file.ReadToEnd());
@@ -91,7 +91,7 @@ namespace dotnet.gtests
                 var root = (CompilationUnitSyntax)tree.GetRoot();
                 var classMethods = from methodDeclaration in root.DescendantNodes().OfType<MethodDeclarationSyntax>()
                                    where string.Equals(methodDeclaration.Modifiers.FirstOrDefault().ValueText, "public", StringComparison.OrdinalIgnoreCase)
-                                   select "\t\tvoid " + methodDeclaration.Identifier.ValueText + "()\n\t\t{\n\t\t}\n";
+                                   select "\tvoid " + methodDeclaration.Identifier.ValueText + "()\n\t{\n\t}\n";
 
                 //If count of methods is 0, maybe is a model, interface
                 if (classMethods.Count() == 0)
