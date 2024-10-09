@@ -79,7 +79,7 @@ namespace dotnet.gtests
             foreach (var codeFile in codeFiles)
             {
                 var treeDirectory = GetTreeDirectory(codeFilesPath, codeFile);
-                var classNamespace = $"{rootNamespace}{treeDirectory.Replace(Path.DirectorySeparatorChar, '.')}";
+                var classNamespace = $"{rootNamespace}{treeDirectory.Replace('/', '.')}";
                 var className = $"{Path.GetFileNameWithoutExtension(codeFile)}Tests";
                 var fileName = $"{className}.cs";
                 var fileDirectory = testFilesPath + Path.DirectorySeparatorChar + options.OutputDir + treeDirectory;
